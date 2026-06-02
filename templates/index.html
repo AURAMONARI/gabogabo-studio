@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header class="hero-section">
+    <div class="container hero-container-flex">
+        
+        <div class="hero-content-left">
+            <h1>Rivoluziona il Tuo Corpo,<br>Proteggi la Tua Salute</h1>
+            <p>L'unico studio professionale a Milano dove Personal Training, Fisioterapia e Nutrizione lavorano in perfetta sinergia per i tuoi obiettivi.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('collaboratori') }}" class="btn btn-primary">Scopri il Nostro Team</a>
+                <a href="{{ url_for('recensioni') }}" class="btn btn-secondary">Guarda le Recensioni</a>
+            </div>
+        </div>
+
+        <div class="hero-image-right">
+            <img src="{{ url_for('static', filename='images/studio_hero.png') }}" alt="GabGabo Personal Studio Struttura">
+        </div>
+
+    </div>
+</header>
+
+<section class="services-section">
+    <div class="container text-center">
+        <h2 class="section-title">I Nostri Servizi Specialistici</h2>
+        <p class="section-subtitle">Un approccio a 360° per garantirti il massimo dei risultati senza infortuni.</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon pt-color">🏋️‍♂️</div>
+                <h3>Personal Training</h3>
+                <p>Allenamenti individuali cuciti su misura per la tua struttura muscolare, focalizzati sul dimagrimento e sulla tonificazione.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon nutri-color">🥗</div>
+                <h3>Nutrizione Specialistica</h3>
+                <p>Piani alimentari sostenibili e scientifici per ottimizzare le tue energie, migliorare la salute e rimodellare le tue forme.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon fisio-color">💆‍♂️</div>
+                <h3>Fisioterapia & Recovery</h3>
+                <p>Terapia manuale e riabilitazione mirata per eliminare definitivamente i dolori articolari e recuperare la mobilità.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-box">
+        <h2>Prenota una Visita Conoscitiva Gratuita</h2>
+        <p>Vieni a trovarci in studio: analizzeremo la tua situazione di partenza e struttureremo il percorso perfetto per te.</p>
+        <div class="cta-contact-info">
+            <div class="contact-item">📞 <strong>Telefono:</strong> 333-1234567</div>
+            <div class="contact-item">📧 <strong>Email:</strong> info@gabogabostudio.it</div>
+            <div class="contact-item">📍 <strong>Sede:</strong> Viale Liguria, 46</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

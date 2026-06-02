@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center">
+        <h2 class="section-title">I Nostri Specialisti</h2>
+        <p class="section-subtitle">Un'équipe d'élite divisa per aree di competenza per offrirti il meglio della scienza del movimento.</p>
+    </div>
+
+    <section class="team-department">
+        <div class="dept-info">
+            <h3>🏋️‍♂️ Area Personal Training</h3>
+            <p>Esperti in ricomposizione corporea, forza e performance. I nostri coach creano protocolli basati sulla scienza per trasformare il tuo fisico in modo sostenibile.</p>
+        </div>
+        <div class="team-grid-modern">
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/personalbarbix.png') }}" alt="Coach">
+                        <div class="payment-overlay">
+                            <h4>Listino Prezzi</h4>
+                            <div class="price-item">
+                                <span>Single Session</span>
+                                <strong>50€</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Pack 10 Ingressi</span>
+                                <strong>450€</strong>
+                            </div>
+                            <p class="price-note">Include scheda personalizzata</p>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Barbix StickMan</h3>
+                        <p class="role-label pt-color">Head of Training</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/budybuilder.png') }}" alt="Coach">
+                        <div class="payment-overlay">
+                            <h4>Listino Prezzi</h4>
+                            <div class="price-item">
+                                <span>Coach Online</span>
+                                <strong>80€/mese</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Personal 1-to-1</span>
+                                <strong>60€</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>BudyBuilder6418</h3>
+                        <p class="role-label pt-color">Strength Coach</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-department">
+        <div class="dept-info">
+            <h3>🥗 Area Nutrizione</h3>
+            <p>La base di ogni risultato è a tavola. I nostri biologi nutrizionisti analizzano il tuo metabolismo per creare piani alimentari che alimentano la tua energia.</p>
+        </div>
+        <div class="team-grid-modern">
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/nicolenutri.png') }}" alt="Nutrizionista">
+                        <div class="payment-overlay">
+                            <h4>Piani Nutrizionali</h4>
+                            <div class="price-item">
+                                <span>Prima Visita</span>
+                                <strong>100€</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Controllo</span>
+                                <strong>50€</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Dott.ssa Nicole</h3>
+                        <p class="role-label nutri-color">Nutrizionista Sportiva</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/gabogabo.png') }}" alt="Nutrizionista">
+                        <div class="payment-overlay">
+                            <h4>Piani Nutrizionali</h4>
+                            <div class="price-item">
+                                <span>Bioimpedenziometria</span>
+                                <strong>40€</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Piano Semestrale</span>
+                                <strong>250€</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Dott. GaboGabo</h3>
+                        <p class="role-label nutri-color">Biologo Nutrizionista</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-department">
+        <div class="dept-info">
+            <h3>💆‍♂️ Area Fisioterapia</h3>
+            <p>Recupero infortuni e terapia manuale. Professionisti dedicati alla salute delle tue articolazioni per permetterti di muoverti senza dolore.</p>
+        </div>
+        <div class="team-grid-modern">
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/danilopanzone.png') }}" alt="Fisioterapista">
+                        <div class="payment-overlay">
+                            <h4>Trattamenti</h4>
+                            <div class="price-item">
+                                <span>Terapia Manuale</span>
+                                <strong>70€</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Tecar Terapia</span>
+                                <strong>40€</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Dr. Danilo Dzerpaia</h3>
+                        <p class="role-label fisio-color">Fisioterapista OMPT</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-modern">
+                <div class="card-inner">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='images/rataa.png') }}" alt="Fisioterapista">
+                        <div class="payment-overlay">
+                            <h4>Trattamenti</h4>
+                            <div class="price-item">
+                                <span>Riabilitazione</span>
+                                <strong>60€</strong>
+                            </div>
+                            <div class="price-item">
+                                <span>Massoterapia</span>
+                                <strong>50€</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Dr.Ratatouille</h3>
+                        <p class="role-label fisio-color">Specialista Riabilitazione</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

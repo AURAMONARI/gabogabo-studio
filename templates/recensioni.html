@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container review-page-container">
+    
+    <div class="text-center">
+        <h2 class="section-title">Le Voci dei Nostri Atleti</h2>
+        <p class="section-subtitle">Scopri i risultati di chi ha già scelto il metodo GaboGabo Studio o lascia il tuo feedback con foto.</p>
+    </div>
+
+    <section class="form-section-box">
+        <div class="form-card">
+            <h3>Lascia la tua Recensione</h3>
+            <p>La tua opinione e il tuo cambiamento sono importanti per noi.</p>
+            
+            <form action="{{ url_for('recensioni') }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Es. Mario Rossi" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="servizio">Collaboratore / Area Specialstica</label>
+                        <select id="servizio" name="servizio" required>
+                            <option value="" disabled selected>Con chi ti sei allenato/curato?</option>
+                            <option value="Personal Trainer Team">🏋️‍♂️ Personal Trainer Team</option>
+                            <option value="Nutrizionista Team">🥗 Nutrizionista Team</option>
+                            <option value="Fisioterapista Team">💆‍♂️ Fisioterapista Team</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group flex-1">
+                        <label for="voto">Valutazione (Voto)</label>
+                        <select id="voto" name="voto" required>
+                            <option value="" disabled selected>Dai un voto da 1 a 5...</option>
+                            <option value="5">⭐⭐⭐⭐⭐ (Eccellente)</option>
+                            <option value="4">⭐⭐⭐⭐ (Molto Buono)</option>
+                            <option value="3">⭐⭐⭐ (Buono)</option>
+                            <option value="2">⭐⭐ (Sufficiente)</option>
+                            <option value="1">⭐ (Scarso)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Aggiungi una foto dei tuoi progressi (Opzionale)</label>
+                    <div class="modern-upload-zone">
+                        <input type="file" id="foto" name="foto" accept="image/*">
+                        <div class="upload-custom-design">
+                            <span class="upload-icon">📸</span>
+                            <p class="upload-text">Clicca per scattare una foto o sceglierla dalla galleria</p>
+                            <span class="upload-subtext">Formati accettati: PNG, JPG</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="commento">Il tuo Messaggio</label>
+                    <textarea id="commento" name="commento" rows="4" placeholder="Raccontaci la tua esperienza..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Invia Recensione</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="reviews-display-section">
+        <h3 class="sub-section-title">Ultimi Feedback Ricevuti</h3>
+        
+        <div class="reviews-list-grid">
+            {% for recensione in recensioni %}
+            <div class="review-display-card">
+                
+                <div class="admin-control-delete">
+                    <form action="{{ url_for('delete_recensione', id=recensione.id) }}" method="POST" onsubmit="return richiediPasswordAmministratore(this);">
+                        <input type="hidden" name="admin_password" class="secure-pass-field">
+                        <button type="submit" class="trash-btn" title="Elimina recensione indesiderata">🗑️</button>
+                    </form>
+                </div>
+
+                <div class="review-card-header">
+                    <div class="user-info">
+                        <h4>{{ recensione.nome }}</h4>
+                        <span class="badge-service">{{ recensione.servizio }}</span>
+                    </div>
+                    <div class="stars-box">
+                        {% if recensione.voto|int == 5 %} ⭐⭐⭐⭐⭐
+                        {% elif recensione.voto|int == 4 %} ⭐⭐⭐⭐
+                        {% elif recensione.voto|int == 3 %} ⭐⭐⭐
+                        {% elif recensione.voto|int == 2 %} ⭐⭐
+                        {% else %} ⭐
+                        {% endif %}
+                    </div>
+                </div>
+
+                <p class="review-text">"{{ recensione.commento }}"</p>
+
+                {% if recensione.foto %}
+                <div class="review-attached-image">
+                    <p class="photo-attached-label">Visualizza Risultato:</p>
+                    <div class="interactive-popup-wrapper">
+                        <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" class="thumb-img" alt="Risultato">
+                        
+                        <div class="hover-popup-window">
+                            <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" alt="Risultato Ingrandito">
+                            <div class="popup-caption">Risultato di {{ recensione.nome }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            {% else %}
+            <div class="no-reviews text-center">
+                <p>Non ci sono ancora recensioni. Sii il primo a lasciarne una!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+
+<script>
+function richiediPasswordAmministratore(formElement) {
+    // Mostra il prompt nativo del browser per inserire la password segreta
+    var passwordDigitata = prompt("🔒 ACCESSO PROTETTO:\nInserisci la password di amministrazione per eliminare questa recensione:");
+    
+    // Se l'utente clicca Annulla o non scrive nulla, interrompiamo tutto
+    if (passwordDigitata === null || passwordDigitata.trim() === "") {
+        return false; 
+    }
+    
+    // Iniettiamo la password inserita nel campo nascosto del form prima dell'invio a Python
+    formElement.querySelector('.secure-pass-field').value = passwordDigitata;
+    return true; // Esegue il form inviando i dati al server
+}
+</script>
+{% endblock %}
