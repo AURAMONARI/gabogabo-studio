@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import base64  # <--- AGGIUNTO PER CONVERTIRE LE FOTO IN TESTO
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
@@ -104,13 +105,13 @@ def recensioni():
         if 'foto' in request.files:
             file = request.files['foto']
             if file and file.filename != '':
-                filename = secure_filename(file.filename)
                 try:
-                    # Salva fisicamente il file dentro static/uploads/ (Funziona sul PC)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    foto_nome = filename
+                    # TRUCCO PER VERCEL: Leggiamo i dati dell'immagine e li convertiamo in testo Base64
+                    foto_bytes = file.read()
+                    foto_base64 = base64.b64encode(foto_bytes).decode('utf-8')
+                    # Creiamo il link testuale dell'immagine (funziona direttamente nei tag <img>)
+                    foto_nome = f"data:{file.mimetype};base64,{foto_base64}"
                 except Exception:
-                    # Se siamo su Vercel (Read-Only), impediamo il crash dell'app.
                     foto_nome = None
 
         # SALVATAGGIO IN DATABASE TRAMITE QUERY SQL INSERT INTO
@@ -119,7 +120,7 @@ def recensioni():
             cursor.execute('''
                 INSERT INTO recensioni (nome, servizio, voto, commento, foto)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (nome, servizio, voto, commento, foto_nome))
+            ''', (nome, servicio, voto, commento, foto_nome))
             conn.commit()
         
         return redirect(url_for('recensioni'))
