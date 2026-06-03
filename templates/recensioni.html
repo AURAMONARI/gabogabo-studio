@@ -100,12 +100,23 @@
                 <div class="review-attached-image">
                     <p class="photo-attached-label">Visualizza Risultato:</p>
                     <div class="interactive-popup-wrapper">
-                        <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" class="thumb-img" alt="Risultato">
                         
-                        <div class="hover-popup-window">
-                            <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" alt="Risultato Ingrandito">
-                            <div class="popup-caption">Risultato di {{ recensione.nome }}</div>
-                        </div>
+                        {% if 'data:' in recensione.foto %}
+                            <img src="{{ recensione.foto }}" class="thumb-img" alt="Risultato">
+                            
+                            <div class="hover-popup-window">
+                                <img src="{{ recensione.foto }}" alt="Risultato Ingrandito">
+                                <div class="popup-caption">Risultato di {{ recensione.nome }}</div>
+                            </div>
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" class="thumb-img" alt="Risultato">
+                            
+                            <div class="hover-popup-window">
+                                <img src="{{ url_for('static', filename='uploads/' + recensione.foto) }}" alt="Risultato Ingrandito">
+                                <div class="popup-caption">Risultato di {{ recensione.nome }}</div>
+                            </div>
+                        {% endif %}
+
                     </div>
                 </div>
                 {% endif %}
