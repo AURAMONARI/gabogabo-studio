@@ -3,7 +3,7 @@
 Sito web completo e dinamico sviluppato in Python con il framework Flask, progettato per gestire le recensioni degli utenti con supporto al caricamento di immagini e memorizzazione persistente dei dati.
 
 ## 🚀 Link al Sito Pubblicato
-🔗 **[Visualizza il sito live qui](gabogabo-studio.vercel.app)**
+🔗 **[Visualizza il sito live qui](https://gabogabo-studio.vercel.app)**
 
 ---
 
