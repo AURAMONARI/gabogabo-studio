@@ -1,6 +1,6 @@
 import os
 import sqlite3
-import base64  # <--- AGGIUNTO PER CONVERTIRE LE FOTO IN TESTO
+import base64  # Per convertire le foto in testo ed evitare i blocchi di Vercel
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
@@ -96,7 +96,7 @@ def recensioni():
     
     if request.method == 'POST':
         nome = request.form.get('nome')
-        servizio = request.form.get('servizio')
+        servizio = request.form.get('servizio')  # <--- Variabile corretta con la Z
         voto = request.form.get('voto')
         commento = request.form.get('commento')
         
@@ -109,7 +109,7 @@ def recensioni():
                     # TRUCCO PER VERCEL: Leggiamo i dati dell'immagine e li convertiamo in testo Base64
                     foto_bytes = file.read()
                     foto_base64 = base64.b64encode(foto_bytes).decode('utf-8')
-                    # Creiamo il link testuale dell'immagine (funziona direttamente nei tag <img>)
+                    # Creiamo la stringa dell'immagine utilizzabile dall'HTML
                     foto_nome = f"data:{file.mimetype};base64,{foto_base64}"
                 except Exception:
                     foto_nome = None
@@ -117,10 +117,11 @@ def recensioni():
         # SALVATAGGIO IN DATABASE TRAMITE QUERY SQL INSERT INTO
         with sqlite3.connect(DATABASE) as conn:
             cursor = conn.cursor()
+            # RISOLTO: Ora usa 'servizio' con la Z ovunque!
             cursor.execute('''
                 INSERT INTO recensioni (nome, servizio, voto, commento, foto)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (nome, servicio, voto, commento, foto_nome))
+            ''', (nome, servizio, voto, commento, foto_nome))
             conn.commit()
         
         return redirect(url_for('recensioni'))
