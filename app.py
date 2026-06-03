@@ -6,16 +6,27 @@ from werkzeug.utils import secure_filename
 # 1. INIZIALIZZAZIONE APPLICAZIONE FLASK
 app = Flask(__name__)
 
+# CONTROLLO SE SIAMO ONLINE SU VERCEL O IN LOCALE
+IS_VERCEL = "VERCEL" in os.environ
+
 # 2. CONFIGURAZIONE CARTELLA PER IL CARICAMENTO DELLE FOTO
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Crea automaticamente la cartella "uploads" dentro "static" se non esiste sul PC
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+try:
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+except Exception:
+    pass
 
 # 3. CONFIGURAZIONE SICUREZZA
 ADMIN_PASSWORD = "hihihiha"  # La tua password per eliminare le recensioni
-DATABASE = "database.db"     # Il file del database SQL che verrà creato automaticamente
+
+# Database dinamico: se siamo su Vercel va in /tmp, altrimenti rimane locale
+if IS_VERCEL:
+    DATABASE = "/tmp/database.db"
+else:
+    DATABASE = "database.db"
 
 # ==========================================
 # FUNZIONI DI GESTIONE DATABASE SQLITE
@@ -52,8 +63,13 @@ def init_db():
             ))
         conn.commit()
 
+def check_db():
+    """Verifica la presenza del database ad ogni richiesta (essenziale per l'ambiente temporaneo di Vercel)."""
+    if not os.path.exists(DATABASE):
+        init_db()
+
 # Esegue l'inizializzazione del database all'avvio dell'app
-init_db()
+check_db()
 
 
 # ==========================================
@@ -75,6 +91,8 @@ def collaboratori():
 # PAGINA RECENSIONI (INVIO, FOTO DA GALLERIA/FOTOCAMERA E POPUP)
 @app.route('/recensioni', methods=['GET', 'POST'])
 def recensioni():
+    check_db()  # Controllo di sicurezza per Vercel serverless
+    
     if request.method == 'POST':
         nome = request.form.get('nome')
         servizio = request.form.get('servizio')
@@ -87,9 +105,14 @@ def recensioni():
             file = request.files['foto']
             if file and file.filename != '':
                 filename = secure_filename(file.filename)
-                # Salva fisicamente il file dentro static/uploads/
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                foto_nome = filename
+                try:
+                    # Salva fisicamente il file dentro static/uploads/ (Funziona sul PC)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    foto_nome = filename
+                except Exception:
+                    # Se siamo su Vercel (Read-Only), impediamo il crash dell'app.
+                    # La recensione viene salvata nel DB temporaneo senza salvare fisicamente il file.
+                    foto_nome = None
 
         # SALVATAGGIO IN DATABASE TRAMITE QUERY SQL INSERT INTO
         with sqlite3.connect(DATABASE) as conn:
@@ -97,7 +120,7 @@ def recensioni():
             cursor.execute('''
                 INSERT INTO recensioni (nome, servizio, voto, commento, foto)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (nome, servizio, voto, commento, foto_nome))
+            ''', (nome, servicio, voto, commento, foto_nome))
             conn.commit()
         
         return redirect(url_for('recensioni'))
@@ -119,6 +142,7 @@ def recensioni():
 # ROTTA DI CANCELLAZIONE PROTETTA DA PASSWORD
 @app.route('/delete_recensione/<int:id>', methods=['POST'])
 def delete_recensione(id):
+    check_db()  # Controllo di sicurezza per Vercel serverless
     password_inserita = request.form.get('admin_password')
     
     # Controlla se la password inserita nel popup JavaScript coincide con quella admin
