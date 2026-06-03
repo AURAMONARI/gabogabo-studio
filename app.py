@@ -111,7 +111,6 @@ def recensioni():
                     foto_nome = filename
                 except Exception:
                     # Se siamo su Vercel (Read-Only), impediamo il crash dell'app.
-                    # La recensione viene salvata nel DB temporaneo senza salvare fisicamente il file.
                     foto_nome = None
 
         # SALVATAGGIO IN DATABASE TRAMITE QUERY SQL INSERT INTO
@@ -120,7 +119,7 @@ def recensioni():
             cursor.execute('''
                 INSERT INTO recensioni (nome, servizio, voto, commento, foto)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (nome, servicio, voto, commento, foto_nome))
+            ''', (nome, servizio, voto, commento, foto_nome))
             conn.commit()
         
         return redirect(url_for('recensioni'))
